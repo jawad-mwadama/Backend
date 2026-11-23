@@ -38,22 +38,46 @@ const url = require("url");
 ////////////////////////////////////////////////////
 ////// SERVER
 
+const replaceTemplate = (temp, product) => {};
+
+const tempOverview = fs.readFileSync(
+  `${__dirname}/templates/template-overview.html`,
+  "utf-8",
+);
+const tempCard = fs.readFileSync(
+  `${__dirname}/templates/template-card.html`,
+  "utf-8",
+);
+const tempProduct = fs.readFileSync(
+  `${__dirname}/templates/template-product.html`,
+  "utf-8",
+);
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
 const dataObj = JSON.parse(data);
 
 const server = http.createServer((req, res) => {
   const pathName = req.url;
 
+  // Overview Page
   if (pathName === "/" || pathName === "/overview") {
-    res.end("This is the OVERVIEW !");
+    res.writeHead(200, { "Content-type": "text/html" });
+
+    const cardHtml = dataObj.map((el) => replaceTemplate(tempCard, el));
+
+    res.end(tempOverview);
+
+    //Product Page
   } else if (pathName === "/product") {
     res.end("This is the PRODUCT !");
+
+    //Api
   } else if (pathName === "/api") {
     fs.readFile(`${__dirname}/dev-data/data.json`, "utf-8", (err, data) => {
       res.writeHead(200, { "Content-type": "application/json" });
       res.end(data);
     });
   } else {
+    //Not Found
     res.writeHead(404, {
       "Content-type": "text/html",
       "my-own-header": "hello-world",
