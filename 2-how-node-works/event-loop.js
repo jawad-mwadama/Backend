@@ -10,6 +10,7 @@ setImmediate(() => {
 
 fs.readFile("test-file.txt", () => {
   console.log("I/O finished");
+  console.log("------------------");
   setTimeout(() => {
     (console.log("Timer 2 is finished"), 0);
   });
@@ -20,6 +21,10 @@ fs.readFile("test-file.txt", () => {
 
   setImmediate(() => {
     console.log("Immediate 2 is finished");
+  });
+
+  process.nextTick(() => {
+    console.log("Process.nextTick");
   });
 });
 
